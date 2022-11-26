@@ -28,7 +28,7 @@ app.layout = html.Div(
 def update_graph(*_):
     ctx = callback_context
     print('ctx.inputs', ctx.inputs)
-    print('ctx.triggered_id', ctx.triggered_id)
+    print('ctx.triggered_id', ctx.triggered_id.replace('btn-', ''))
     print('ctx.triggered', ctx.triggered[0]['value'])
     print('=======================')
     if not ctx.triggered:
