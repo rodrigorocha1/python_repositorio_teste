@@ -2,6 +2,7 @@ from dash import Dash, dcc, html, callback_context
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
+from enumcor import Cor
 
 app = Dash(__name__)
 
@@ -16,27 +17,23 @@ def make_figure0(n):
 
 app.layout = html.Div(
     [
-        html.Div([html.Div(dbc.Button(f"{tipo}", id=f"btn-{tipo}")) for tipo in tipos]),
+        html.Div([html.Div(dbc.Button(f"{cor.name}", id=f"btn-{cor.name}")) for cor in Cor]),
         html.P(id="graph"),
     ]
 )
 
 
 @app.callback(
-    Output("graph", "children"), [Input(f"btn-{tipo}", "n_clicks") for tipo in tipos]
+    Output("graph", "children"), [Input(f"btn-{cor.name}", "n_clicks")for cor in Cor]
 )
 def update_graph(*_):
     ctx = callback_context
     print('ctx.inputs', ctx.inputs)
-    print('ctx.triggered_id', ctx.triggered_id.replace('btn-', ''))
+    print('ctx.triggered_id', ctx.triggered_id)
     print('ctx.triggered', ctx.triggered[0]['value'])
     print('=======================')
-    if not ctx.triggered:
-        raise PreventUpdate
-    else:
-        n = ctx.triggered[0]["prop_id"].split(".")[0].split("-")[1]
-    if n == "0":
-        return make_figure0(n)
+
+    return ctx.triggered[0]['value']
 
 
 if __name__ == "__main__":
